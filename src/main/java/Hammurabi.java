@@ -58,7 +58,7 @@ public class Hammurabi {
 				grain += plantedAcres * 3;
 
 			//Updates death and population statistics based on plague
-			plagueDeaths += plagueDeaths(population);
+			plagueDeaths = plagueDeaths(population);
 				population -= plagueDeaths;
 				totalDeathsFromPlague += plagueDeaths;
 				totalDeaths += plagueDeaths;
@@ -70,10 +70,12 @@ public class Hammurabi {
 				totalDeaths += starvedPopulation;
 
 			//Updates immigrant and population statistics based on hunger
-			if (starvedPopulation < 1) {
+			if (starvedPopulation == 0) {
 				immigrants = newImmigrants(population, acres, grain);
 				totalImmigrants += immigrants;
 				population += immigrants;
+			} else {
+				immigrants = 0;
 			}
 
 			//Sets new years cost of land
