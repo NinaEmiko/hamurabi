@@ -28,7 +28,7 @@ public class Hammurabi {
 		int totalDeathsFromPlague = 0;
 		int totalImmigrants = 0;
 
-		while (currentYear < 10 && gameOver == false) {
+		while (currentYear < 10 && !gameOver) {
 			printSummary(currentYear, plagueDeaths, starvedPopulation, immigrants, population, grain, grainHarvested, bushelsPerAcre, grainEatenByRats, acres, landValue);
 			int acresBought = askHowManyAcresToBuy(landValue, grain);
 				acres += acresBought;
@@ -55,11 +55,13 @@ public class Hammurabi {
 				immigrants = newImmigrants(population, acres, grain);
 				totalImmigrants += immigrants;
 			}
-			population = population - plagueDeaths - starvedPopulation + immigrants;
+			population += immigrants;
 			landValue = newCostOfLand();
 			grainHarvested = harvest(plantedAcres);
-			bushelsPerAcre = grainHarvested / plantedAcres;
-			grain -= grainEatenByRats(grain);
+				bushelsPerAcre = grainHarvested / plantedAcres;
+			grainEatenByRats -= grainEatenByRats(grain);
+				grainEatenByRats -= grainEatenByRats;
+
 			if (uprising(population, starvedPopulation)) {
 				gameOver = true;
 			}
@@ -197,16 +199,13 @@ public class Hammurabi {
 	}
 
 	int grainEatenByRats(int bushels) {
-		//40% chance of rat infestation
-		//When tru, rats will eat between 10-30% of grain
-		//Return amount of grain eaten by rats
-		double infestationPercent = rand.nextInt(100);
+		int infestationPercent = rand.nextInt(100);
 		double cropLossPercent = (rand.nextInt(20) + 10);
-		double cropLoss = 0;
+		int cropLoss = 0;
 		if (infestationPercent < 40) {
 			cropLoss += bushels * (cropLossPercent / 100);
 		}
-		return (int) cropLoss;
+		return cropLoss;
 	}
 
 	int newCostOfLand() {
