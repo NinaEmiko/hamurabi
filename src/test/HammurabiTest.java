@@ -1,5 +1,3 @@
-package hammurabi;
-
 import static org.junit.Assert.*;
 
 import org.junit.Before;
@@ -119,6 +117,27 @@ public class HammurabiTest {
         for (int j = 17; j <= 23; j++) {
             assertTrue("You never have a land cost of " + j + " bushels per acre.", cost[j] > 0);
         }
+    }
+
+    @Test
+    public final void testAskHowManyAcresOfLandToBuy() {
+        int cost = 0;
+
+    }
+
+    @Test
+    public final void testHowManyAcresOfLandToSell() {
+
+    }
+
+    @Test
+    public final void testHowMuchGrainToFeedPeople() {
+
+    }
+
+    @Test
+    public final void testHowManyAcresToPlant() {
+
     }
 
 }
