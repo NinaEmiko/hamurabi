@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,8 +59,8 @@ public class HammurabiTest {
     }
 
     @Test
-    public final void testImmigrants() {
-        int imm = ham.immigrants(10, 1200, 500);
+    public final void testNewImmigrants() {
+        int imm = ham.newImmigrants(10, 1200, 500);
         assertEquals("Wrong number of immigrants.", 25, imm);
     }
 
@@ -117,27 +118,6 @@ public class HammurabiTest {
         for (int j = 17; j <= 23; j++) {
             assertTrue("You never have a land cost of " + j + " bushels per acre.", cost[j] > 0);
         }
-    }
-
-    @Test
-    public final void testAskHowManyAcresOfLandToBuy() {
-        int cost = 0;
-
-    }
-
-    @Test
-    public final void testHowManyAcresOfLandToSell() {
-
-    }
-
-    @Test
-    public final void testHowMuchGrainToFeedPeople() {
-
-    }
-
-    @Test
-    public final void testHowManyAcresToPlant() {
-
     }
 
 }
