@@ -14,6 +14,8 @@ public class Hammurabi {
 		int population = 100;
 		int currentYear = 1;
 		int immigrants = 5;
+		int starvedPopulation = 0;
+		int plagueDeaths = 0;
 		int acres = 1000;
 		int bushelsPerAcre = 3;
 		int grainEatenByRats = 200;
@@ -21,21 +23,31 @@ public class Hammurabi {
 		int grain = grainTotal - grainEatenByRats;
 
 		while (currentYear < 10) {
-			printSummary(currentYear, immigrants, population, grain, grainTotal, bushelsPerAcre, grainEatenByRats, acres, landValue);
-			askHowManyAcresToBuy(landValue, grain);
-			askHowManyAcresToSell(acres);
-			askHowMuchGrainToFeedPeople(grain);
-			askHowManyAcresToPlant(acres, population, grain);
+			printSummary(currentYear, starvedPopulation, immigrants, population, grain, grainTotal, bushelsPerAcre, grainEatenByRats, acres, landValue);
+			int acresBought = askHowManyAcresToBuy(landValue, grain);
+				acres += acresBought;
+				grain -= acresBought * landValue;
+			int acresSold = askHowManyAcresToSell(acres);
+				acres -= acresSold;
+				grain += acresSold * landValue;
+			int food = askHowMuchGrainToFeedPeople(grain);
+				grain -= food;
+			int plantedAcres = askHowManyAcresToPlant(acres, population, grain);
+				grain += plantedAcres * 3;
+			plagueDeaths += plagueDeaths(population);
+				population -= plagueDeaths;
+			starvedPopulation = starvationDeaths(population, food);
+				population -= starvedPopulation;
 			currentYear++;
 		}
 		finalSummary();
 	}
 
-	public void printSummary(int currentYear, int immigrants, int population, int grain, int grainTotal, int bushelsPerAcre, int grainEatenByRats, int acres, int landValue) {
+	public void printSummary(int currentYear, int starvedPopulation, int immigrants, int population, int grain, int grainTotal, int bushelsPerAcre, int grainEatenByRats, int acres, int landValue) {
 		System.out.println("O great Hammurabi!\n" +
 				"You are in year " + currentYear + " of your ten year rule.\n" +
-				"In the previous year " + (currentYear - 1) + " people starved to death.\n" +
-				"in the previous year " + immigrants + " people entered the kingdom.\n" +
+				"In the previous year " + starvedPopulation + " people starved to death.\n" +
+				"In the previous year " + immigrants + " people entered the kingdom.\n" +
 				"The population is now " + population + ".\n" +
 				"We harvested " + grainTotal + " bushels at " + bushelsPerAcre + " bushels per acre.\n" +
 				"Rats destroyed " + grainEatenByRats + " bushels, leaving " + grain + " bushels in storage.\n" +
@@ -44,7 +56,7 @@ public class Hammurabi {
 	}
 
 	public void finalSummary() {
-		
+		System.out.println();
 	}
 
 	int askHowManyAcresToBuy(int price, int bushels) {
@@ -83,7 +95,7 @@ public class Hammurabi {
 		boolean cameCorrect = false;
 		int grainForFood = 0;
 		while (!cameCorrect) {
-			System.out.println("\nHow many acres of land would you like to feed the population with?");
+			System.out.println("\nHow grain would you like to use to feed the population with?");
 			int edibleGrain = scanner.nextInt();
 			if (edibleGrain < bushels) {
 				grainForFood += edibleGrain;
@@ -118,36 +130,47 @@ public class Hammurabi {
 	}
 
 
-	int plagueDeaths(int pop) {
-		int deathPercent = rand.nextInt(pop * (15 / 100));
-		//deaths += deathPercent;
-		//population -= deathPercent;
-		return deathPercent;
+	int plagueDeaths(int population) {
+		int deathPercent = rand.nextInt(100);
+		int plagueDeaths = 0;
+		if (deathPercent < 15) {
+			plagueDeaths += population;
+		}
+		return plagueDeaths;
 	}
 
-	int starvationDeaths(int pop, int bushelsFedToPeople) {
-		//population
-		//bushels left after farming
-		//if population * 20 > bushels left, return 0 deaths
-		//else deathCount, bushelLeftPerPerson, return n deaths
-		return 0;
+	int starvationDeaths(int population, int bushelsFedToPeople) {
+		int hungryFolks = bushelsFedToPeople / 20;
+		int deadFolks = population - hungryFolks;
+		return deadFolks;
 	}
 
-	boolean uprising(int pop, int howManyPeopleStarved) {
-		//if starving population > 45% return true
-		//else return false;
-		return false;
+	boolean uprising(int population, int howManyPeopleStarved) {
+		double boilingPoint = population * .45;
+		boolean weRiot = false;
+		if (howManyPeopleStarved > boilingPoint) {
+			weRiot = true;
+		}
+		return weRiot;
 	}
 
 	int grainEatenByRats(int bushels) {
-		return 0;
+		int infestationPercent = rand.nextInt(100);
+		int cropLossPercent = rand.nextInt(20) + 10;
+		int cropLoss = 0;
+		if (infestationPercent < 40) {
+			cropLoss += bushels; //multiplied by cropLossPercent
+		}
+		return cropLoss;
 	}
 
 	int newCostOfLand() {
+		//random number from 17 to 23
 		return 0;
 	}
 
 	int harvest(int acres, int bushelsUsedAsSeed) {
+		//random number between 1 and 6, inclusively
 		return 0;
 	}
 
