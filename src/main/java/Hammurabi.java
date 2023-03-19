@@ -10,6 +10,7 @@ public class Hammurabi {
 	}
 
 	void playGame() {
+		//Initializes state for first round of game
 		boolean gameOver = false;
 		int grainHarvested = 3000;
 		int population = 100;
@@ -23,51 +24,80 @@ public class Hammurabi {
 		int landValue = 19;
 		int grain = grainHarvested - grainEatenByRats;
 
+		//Saves running totals for final summary
 		int totalDeaths = 0;
 		int totalStarvations = 0;
 		int totalDeathsFromPlague = 0;
 		int totalImmigrants = 0;
 
+		//Keeps game running until winning or losing conditions are met
 		while (currentYear < 10 && !gameOver) {
+
+			//Prints summary from previous year
 			printSummary(currentYear, plagueDeaths, starvedPopulation, immigrants, population, grain, grainHarvested, bushelsPerAcre, grainEatenByRats, acres, landValue);
+
+			//Updates state of game based on acres purchased
 			int acresBought = askHowManyAcresToBuy(landValue, grain);
 				acres += acresBought;
 				grain -= acresBought * landValue;
+
+			//Updates state of game based on acres sold
 			display(population, grain, acres, landValue);
 			int acresSold = askHowManyAcresToSell(acres);
 				acres -= acresSold;
 				grain += acresSold * landValue;
+
+			//Updates state of game based on how much grain was fed to population
 			display(population, grain, acres, landValue);
 			int food = askHowMuchGrainToFeedPeople(grain);
 				grain -= food;
+
+			//Updates state of game based on how many acres of land were planted
 			display(population, grain, acres, landValue);
 			int plantedAcres = askHowManyAcresToPlant(acres, population, grain);
 				grain += plantedAcres * 3;
+
+			//Updates death and population statistics based on plague
 			plagueDeaths += plagueDeaths(population);
 				population -= plagueDeaths;
 				totalDeathsFromPlague += plagueDeaths;
 				totalDeaths += plagueDeaths;
+
+			//Updates death and population statistics based on hunger
 			starvedPopulation = starvationDeaths(population, food);
 				population -= starvedPopulation;
 				totalStarvations += starvedPopulation;
 				totalDeaths += starvedPopulation;
+
+			//Updates immigrant and population statistics based on hunger
 			if (starvedPopulation < 1) {
 				immigrants = newImmigrants(population, acres, grain);
 				totalImmigrants += immigrants;
+				population += immigrants;
 			}
-			population += immigrants;
+
+			//Sets new years cost of land
 			landValue = newCostOfLand();
+
+			//Updates total amount of grain being stored
 			grainHarvested = harvest(plantedAcres);
 				bushelsPerAcre = grainHarvested / plantedAcres;
+
+			//Updates total amount of grain being stored based on infestations
 			grainEatenByRats -= grainEatenByRats(grain);
 				grainEatenByRats -= grainEatenByRats;
 
+			//Makes sure you're not hoarding all the wealth
 			if (uprising(population, starvedPopulation)) {
 				gameOver = true;
 			}
+			//Increments year
 			currentYear++;
 		}
+		//Winning game screen
 		finalSummary(totalDeaths, totalStarvations, totalDeathsFromPlague, totalImmigrants, population, acres);
+
+		//Losing game screen
 		if (gameOver) {
 			gameOver();
 		}
@@ -223,7 +253,6 @@ public class Hammurabi {
 		int newPeeps = (20 * acresOwned + grain) / (100 * population) + 1;
 		return newPeeps;
 	}
-
 	void display(int population, int grain, int acres, int landValue) {
 		System.out.println("\nCurrent Population: " + population + " | Grain in Storage: " + grain + " | Land Owned: " + acres + " | Land Value: " + landValue);
 	}
