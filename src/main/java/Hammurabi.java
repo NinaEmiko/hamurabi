@@ -1,5 +1,3 @@
-
-
 import java.util.*;
 
 public class Hammurabi {
@@ -42,10 +40,12 @@ public class Hammurabi {
 				grain -= acresBought * landValue;
 
 			//Updates state of game based on acres sold
-			display(population, grain, acres, landValue);
-			int acresSold = askHowManyAcresToSell(acres);
+			if (acresBought == 0) {
+				display(population, grain, acres, landValue);
+				int acresSold = askHowManyAcresToSell(acres);
 				acres -= acresSold;
 				grain += acresSold * landValue;
+			}
 
 			//Updates state of game based on how much grain was fed to population
 			display(population, grain, acres, landValue);
